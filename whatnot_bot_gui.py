@@ -154,14 +154,28 @@ def gui_main():
         except Exception:
             pass
     logo_img = None
+    icon_problems = []
     try:
         from givvy_assets import ICON_PNG_B64, LOGO_PNG_B64
         logo_img = tk.PhotoImage(data=LOGO_PNG_B64)
         icon_img = tk.PhotoImage(data=ICON_PNG_B64)
         root.iconphoto(True, icon_img)
         root._keep_images = (logo_img, icon_img)       # tkinter drops images that nothing references
-    except Exception:
+    except Exception as exc:
         logo_img = None
+        icon_problems.append(f"logo/icon image: {type(exc).__name__}: {exc}")
+    if IS_WINDOWS:      # a real .ico is what the Windows title bar and taskbar use most reliably
+        try:
+            import base64
+            import tempfile
+            from givvy_assets import ICON_ICO_B64
+            ico_path = os.path.join(tempfile.gettempdir(), "givvybot_icon.ico")
+            with open(ico_path, "wb") as fh:
+                fh.write(base64.b64decode(ICON_ICO_B64))
+            root.iconbitmap(default=ico_path)
+            root.update_idletasks()
+        except Exception as exc:
+            icon_problems.append(f"window icon: {type(exc).__name__}: {exc}")
 
     style = ttk.Style(root)
     try:
@@ -495,6 +509,8 @@ def gui_main():
     root.protocol("WM_DELETE_WINDOW", on_close)
 
     threading.Thread(target=auto_scan_loop, daemon=True).start()
+    for problem in icon_problems:
+        log("Note - " + problem)
     update_note = os.environ.get("GIVVY_UPDATE_NOTE", "").strip()
     if update_note:
         log(update_note)

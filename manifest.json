@@ -1,8 +1,8 @@
 {
-  "version": "1.0",
+  "version": "1.1",
   "files": {
     "whatnot_giveaway_bot.py": "1a62cd196475ed8d7c94368f119cee76a000b40052a386e191e94af3be617b3b",
-    "whatnot_bot_gui.py": "524a8d61ccb9886c11def1363ea5096aa1c4d9db7e3ebc821787c3f9f6dd6819",
-    "givvy_assets.py": "ee017c70bbc96f0fc28345c76acbea924daaaf93584fa7fa3056ab337646b98a"
+    "whatnot_bot_gui.py": "09b7a906413cfa981fc25c575c267dff16bf6f10680e34c458c67e448096ba79",
+    "givvy_assets.py": "73fdb549bb262d79c399ce65b9de9d499173961f23a5af93f3b49849fc4fb0c9"
   }
 }
