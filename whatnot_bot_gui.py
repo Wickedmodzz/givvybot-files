@@ -259,8 +259,10 @@ def gui_main():
         ttk.Label(header, image=logo_img).pack(side="left")
     else:
         ttk.Label(header, text=APP_NAME, style="Heading.TLabel", font=("Segoe UI", 16, "bold")).pack(side="left")
-    ttk.Label(header, text="auto-joins Whatnot giveaways", style="Muted.TLabel").pack(
+    ttk.Label(header, text="Auto Joins Whatnot Giveaways", style="Muted.TLabel").pack(
         side="left", padx=(12, 0), pady=(10, 0))
+    ttk.Label(header, text="Made By - Wicked", style="Muted.TLabel", font=("Segoe UI", 7)).pack(
+        side="right", anchor="n", pady=(2, 0))
     ttk.Frame(root, style="Line.TFrame", height=2).pack(fill="x", padx=12)
 
     top = ttk.Frame(root, padding=(12, 8, 12, 4))
