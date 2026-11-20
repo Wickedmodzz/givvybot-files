@@ -30,16 +30,16 @@ AUTO_SCAN_SECONDS = 10      # how often to look for new emulators (a full port s
 
 APP_NAME = "GivvyBot"
 
-# Black + green theme
-C_BG = "#050706"        # window background
-C_PANEL = "#0c1210"     # lists, entry boxes, buttons
-C_LOG = "#020403"       # log background
-C_GREEN = "#00e676"     # main accent
-C_BRIGHT = "#69ffaa"    # hover / highlights
-C_DIM = "#1d6b45"       # borders
-C_TEXT = "#c9f7de"      # normal text
-C_MUTED = "#5f8f76"     # small notes
-C_OFF = "#35574a"       # disabled text
+# Black + yellow theme
+C_BG = "#070706"        # window background
+C_PANEL = "#14110a"     # lists, entry boxes, buttons
+C_LOG = "#030302"       # log background
+C_ACCENT = "#ffd60a"     # main accent
+C_BRIGHT = "#ffe566"    # hover / highlights
+C_DIM = "#7a6410"       # borders
+C_TEXT = "#fff3c4"      # normal text
+C_MUTED = "#a8955a"     # small notes
+C_OFF = "#665a30"       # disabled text
 
 
 # ----------------------------------------------------------------------------------------
@@ -217,28 +217,28 @@ def gui_main():
     style.configure("TFrame", background=C_BG)
     style.configure("TLabel", background=C_BG, foreground=C_TEXT)
     style.configure("Muted.TLabel", foreground=C_MUTED)
-    style.configure("Heading.TLabel", foreground=C_GREEN, font=("Segoe UI", 9, "bold"))
+    style.configure("Heading.TLabel", foreground=C_ACCENT, font=("Segoe UI", 9, "bold"))
     style.configure("Status.TLabel", foreground=C_BRIGHT)
-    style.configure("Line.TFrame", background=C_GREEN)
-    style.configure("TButton", background=C_PANEL, foreground=C_GREEN, bordercolor=C_DIM,
+    style.configure("Line.TFrame", background=C_ACCENT)
+    style.configure("TButton", background=C_PANEL, foreground=C_ACCENT, bordercolor=C_DIM,
                     padding=(10, 4), relief="flat")
     style.map("TButton",
-              background=[("disabled", C_BG), ("pressed", C_DIM), ("active", "#12261c")],
+              background=[("disabled", C_BG), ("pressed", C_DIM), ("active", "#2a2410")],
               foreground=[("disabled", C_OFF), ("active", C_BRIGHT)],
-              bordercolor=[("disabled", "#13241c"), ("active", C_GREEN)])
-    style.configure("Accent.TButton", background=C_GREEN, foreground="#000000",
-                    bordercolor=C_GREEN, padding=(16, 5), font=("Segoe UI", 9, "bold"))
+              bordercolor=[("disabled", "#2a2410"), ("active", C_ACCENT)])
+    style.configure("Accent.TButton", background=C_ACCENT, foreground="#000000",
+                    bordercolor=C_ACCENT, padding=(16, 5), font=("Segoe UI", 9, "bold"))
     style.map("Accent.TButton",
-              background=[("disabled", "#10281c"), ("pressed", C_DIM), ("active", C_BRIGHT)],
+              background=[("disabled", "#2a2410"), ("pressed", C_DIM), ("active", C_BRIGHT)],
               foreground=[("disabled", C_OFF), ("active", "#000000")],
-              bordercolor=[("disabled", "#10281c"), ("active", C_BRIGHT)])
+              bordercolor=[("disabled", "#2a2410"), ("active", C_BRIGHT)])
     style.configure("TCheckbutton", background=C_BG, foreground=C_TEXT, indicatorcolor=C_PANEL,
                     bordercolor=C_DIM)
     style.map("TCheckbutton",
               background=[("active", C_BG)],
               foreground=[("active", C_BRIGHT)],
-              indicatorcolor=[("selected", C_GREEN), ("pressed", C_DIM)])
-    style.configure("TEntry", fieldbackground=C_PANEL, foreground=C_TEXT, insertcolor=C_GREEN,
+              indicatorcolor=[("selected", C_ACCENT), ("pressed", C_DIM)])
+    style.configure("TEntry", fieldbackground=C_PANEL, foreground=C_TEXT, insertcolor=C_ACCENT,
                     bordercolor=C_DIM)
 
     log_queue = queue.Queue()
@@ -269,8 +269,8 @@ def gui_main():
     ttk.Label(top, text="EMULATORS  (select the ones to run)", style="Heading.TLabel").grid(
         row=0, column=0, sticky="w", pady=(0, 3))
     listbox = tk.Listbox(top, selectmode="extended", height=5, exportselection=False,
-                         bg=C_PANEL, fg=C_TEXT, selectbackground=C_GREEN, selectforeground="#000000",
-                         highlightthickness=1, highlightbackground=C_DIM, highlightcolor=C_GREEN,
+                         bg=C_PANEL, fg=C_TEXT, selectbackground=C_ACCENT, selectforeground="#000000",
+                         highlightthickness=1, highlightbackground=C_DIM, highlightcolor=C_ACCENT,
                          relief="flat", borderwidth=0, activestyle="none", font=("Consolas", 10))
     listbox.grid(row=1, column=0, rowspan=4, sticky="nsew", padx=(0, 8))
     top.columnconfigure(0, weight=1)
@@ -368,9 +368,9 @@ def gui_main():
     # ---- bottom: log ----
     logbox = scrolledtext.ScrolledText(
         root, height=12, font=("Consolas", 9), wrap="word",
-        bg=C_LOG, fg="#7dffb0", insertbackground=C_GREEN, selectbackground=C_DIM,
+        bg=C_LOG, fg="#ffe680", insertbackground=C_ACCENT, selectbackground=C_DIM,
         relief="flat", borderwidth=0, highlightthickness=1,
-        highlightbackground=C_DIM, highlightcolor=C_GREEN)
+        highlightbackground=C_DIM, highlightcolor=C_ACCENT)
     logbox.pack(fill="both", expand=True, padx=12, pady=(0, 12))
 
     def scroll_to_end(_event=None):
