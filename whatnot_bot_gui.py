@@ -155,6 +155,7 @@ def gui_main():
             pass
     logo_img = None
     icon_problems = []
+    ico_file = None
     try:
         from givvy_assets import ICON_PNG_B64, LOGO_PNG_B64
         logo_img = tk.PhotoImage(data=LOGO_PNG_B64)
@@ -172,10 +173,38 @@ def gui_main():
             ico_path = os.path.join(tempfile.gettempdir(), "givvybot_icon.ico")
             with open(ico_path, "wb") as fh:
                 fh.write(base64.b64decode(ICON_ICO_B64))
+            ico_file = ico_path
             root.iconbitmap(default=ico_path)
             root.update_idletasks()
         except Exception as exc:
             icon_problems.append(f"window icon: {type(exc).__name__}: {exc}")
+
+    def apply_windows_icon():
+        """Set the title-bar and taskbar icon straight through Windows (Tk alone can skip it)."""
+        if not (IS_WINDOWS and ico_file):
+            return
+        try:
+            import ctypes
+            user32 = ctypes.windll.user32
+            user32.LoadImageW.restype = ctypes.c_void_p
+            user32.LoadImageW.argtypes = [ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_uint,
+                                          ctypes.c_int, ctypes.c_int, ctypes.c_uint]
+            user32.SendMessageW.restype = ctypes.c_void_p
+            user32.SendMessageW.argtypes = [ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p]
+            user32.GetParent.restype = ctypes.c_void_p
+            user32.GetParent.argtypes = [ctypes.c_void_p]
+            hwnd = user32.GetParent(root.winfo_id()) or root.winfo_id()
+            small = user32.LoadImageW(None, ico_file, 1, user32.GetSystemMetrics(49), user32.GetSystemMetrics(50), 0x10)
+            big = user32.LoadImageW(None, ico_file, 1, user32.GetSystemMetrics(11), user32.GetSystemMetrics(12), 0x10)
+            if small:
+                user32.SendMessageW(hwnd, 0x80, 0, small)      # WM_SETICON, ICON_SMALL
+            if big:
+                user32.SendMessageW(hwnd, 0x80, 1, big)        # WM_SETICON, ICON_BIG
+            root._keep_icons = (small, big)
+            if not (small and big):
+                log("Note - window icon: Windows could not load the icon file.")
+        except Exception as exc:
+            log(f"Note - window icon (Windows): {type(exc).__name__}: {exc}")
 
     style = ttk.Style(root)
     try:
@@ -519,6 +548,8 @@ def gui_main():
     pump_logs()
     refresh()
     hide_console_if_packaged()     # window is up: now the black console can go
+    root.after(50, apply_windows_icon)
+    root.after(600, apply_windows_icon)      # again once the window is fully shown
     root.mainloop()
 
 
